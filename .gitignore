@@ -1,0 +1,39 @@
+# Dependencias
+node_modules/
+
+# Expo y compilación
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+.metro-health-check*
+
+# Logs y caché
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+
+# Variables de entorno locales
+.env
+.env*.local
+
+# Carpetas nativas generadas
+/ios
+/android
+
+# Archivos locales de herramientas
+.claude/
+.impeccable/
+AGENTS.md
+PRODUCT.md

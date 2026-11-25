@@ -1,0 +1,118 @@
+import React from 'react';
+import {
+  AlertCircle,
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Award,
+  Ban,
+  Bell,
+  Building2,
+  Calendar,
+  CalendarCheck,
+  Check,
+  CheckCircle2,
+  ChevronRight,
+  Circle,
+  Clock,
+  CreditCard,
+  Dumbbell,
+  Eye,
+  EyeOff,
+  Flame,
+  Home,
+  Info,
+  KeyRound,
+  Link2,
+  Lock,
+  LogOut,
+  Mail,
+  MapPin,
+  Pencil,
+  Phone,
+  Plus,
+  RefreshCw,
+  RotateCcw,
+  Search,
+  Settings,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  Star,
+  Trash2,
+  User,
+  UserCheck,
+  Users,
+  Wallet,
+  X,
+  XCircle,
+} from 'lucide-react-native';
+import { Colors } from '../../constants/Colors';
+
+export const ICON_MAP = {
+  alertCircle: AlertCircle,
+  alertTriangle: AlertTriangle,
+  arrowLeft: ArrowLeft,
+  arrowRight: ArrowRight,
+  award: Award,
+  ban: Ban,
+  bell: Bell,
+  building: Building2,
+  calendar: Calendar,
+  calendarCheck: CalendarCheck,
+  check: Check,
+  checkCircle: CheckCircle2,
+  chevronRight: ChevronRight,
+  circle: Circle,
+  clock: Clock,
+  creditCard: CreditCard,
+  dumbbell: Dumbbell,
+  edit: Pencil,
+  eye: Eye,
+  eyeOff: EyeOff,
+  flame: Flame,
+  home: Home,
+  info: Info,
+  key: KeyRound,
+  link: Link2,
+  lock: Lock,
+  logOut: LogOut,
+  mail: Mail,
+  mapPin: MapPin,
+  phone: Phone,
+  plus: Plus,
+  refresh: RefreshCw,
+  rotateCcw: RotateCcw,
+  search: Search,
+  settings: Settings,
+  shieldCheck: ShieldCheck,
+  sliders: SlidersHorizontal,
+  sparkles: Sparkles,
+  star: Star,
+  trash: Trash2,
+  user: User,
+  userCheck: UserCheck,
+  users: Users,
+  wallet: Wallet,
+  x: X,
+  xCircle: XCircle,
+} as const;
+
+export type AppIconName = keyof typeof ICON_MAP;
+
+export interface AppIconProps {
+  name: AppIconName;
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}
+
+export function AppIcon({
+  name,
+  size = 20,
+  color = Colors.night,
+  strokeWidth = 2,
+}: AppIconProps) {
+  const IconComponent = ICON_MAP[name];
+  return <IconComponent size={size} color={color} strokeWidth={strokeWidth} />;
+}

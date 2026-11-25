@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "FitLink",
+    "slug": "fitlink-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/brand/fitlink-icono-apk-noche-512.png",
+    "scheme": "fitlink",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/brand/fitlink-logo-amarillo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B1026"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "softwareKeyboardLayoutMode": "resize",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1026",
+        "foregroundImage": "./assets/brand/fitlink-simbolo-blanco.png"
+      },
+      "predictiveBackGestureEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/brand/fitlink-icono-apk-noche-512.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-splash-screen"
+    ]
+  }
+}
