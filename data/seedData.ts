@@ -98,9 +98,9 @@ export const GYM_PROFILE: GymProfile = {
     { label: 'Domingos', hours: '08:00 – 14:00' },
   ],
   policies: [
-    'Cancelación de clases grupales hasta 2 horas antes del inicio (RN-04).',
-    'Sesiones 1-a-1: reembolso total cancelando con 12 h o más de anticipación (RN-06).',
-    'Fichas de pago en efectivo válidas por 48 horas en recepción (RN-09).',
+    'Cancelación de clases grupales hasta 2 horas antes del inicio.',
+    'Sesiones 1-a-1: reembolso total cancelando con 12 h o más de anticipación.',
+    'Fichas de pago en efectivo válidas por 48 horas en recepción.',
   ],
 };
 

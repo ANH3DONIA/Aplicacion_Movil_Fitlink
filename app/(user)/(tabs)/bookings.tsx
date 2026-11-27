@@ -218,7 +218,7 @@ export default function UserBookingsScreen() {
 
                       {segment === 'upcoming' && lockedBy2h ? (
                         <Text style={styles.lockNote}>
-                          Inicia en menos de 2 h: cancelación cerrada según RN-04.
+                          Inicia en menos de 2 h: ya no es posible cancelar.
                         </Text>
                       ) : null}
 
@@ -328,7 +328,7 @@ export default function UserBookingsScreen() {
         description={
           cancelClassTarget?.isWaitlist
             ? `Dejarás tu turno en la lista de espera para ${cancelClassTarget.gymClass.name}.`
-            : `Solo es posible cancelar hasta 2 horas antes del inicio de ${cancelClassTarget?.gymClass.name ?? 'la clase'} (RN-04).`
+            : `Solo es posible cancelar hasta 2 horas antes del inicio de ${cancelClassTarget?.gymClass.name ?? 'la clase'}.`
         }
         confirmLabel={cancelClassTarget?.isWaitlist ? 'Sí, salir' : 'Confirmar cancelación'}
         cancelLabel="Volver"
@@ -343,8 +343,8 @@ export default function UserBookingsScreen() {
         description={
           cancelSessionTarget?.status === 'Confirmada'
             ? sessionHasFullRefund
-              ? `Faltan 12 horas o más para tu sesión con ${cancelSessionTarget.trainerName}. Recibirás el reembolso total de $${cancelSessionTarget.grossMxn} MXN en tu tarjeta (RN-06).`
-              : `Faltan menos de 12 horas para la sesión. Si cancelas ahora no aplica reembolso y el entrenador conserva su parte (RN-06).`
+              ? `Faltan 12 horas o más para tu sesión con ${cancelSessionTarget.trainerName}. Recibirás el reembolso total de $${cancelSessionTarget.grossMxn} MXN en tu tarjeta.`
+              : `Faltan menos de 12 horas para la sesión. Si cancelas ahora no aplica reembolso y el entrenador conserva su parte.`
             : `Se cancelará tu solicitud de horario con ${cancelSessionTarget?.trainerName ?? 'el entrenador'} sin cargo.`
         }
         confirmLabel="Sí, cancelar"

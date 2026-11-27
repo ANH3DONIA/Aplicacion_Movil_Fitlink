@@ -110,7 +110,7 @@ export default function TrainerPaymentsScreen() {
     if (!stripeReady) {
       showToast({
         title: 'Vincula tu cuenta de cobros',
-        description: 'Debes activar Stripe Connect antes de publicar horarios (RF-047).',
+        description: 'Debes activar Stripe Connect antes de publicar horarios.',
         tone: 'warning',
       });
       router.push('/(trainer)/profile');
@@ -195,7 +195,7 @@ export default function TrainerPaymentsScreen() {
           <View style={styles.gateRow}>
             <AppIcon name="lock" size={18} color={Colors.warningText} />
             <Text style={styles.gateText}>
-              Publicación bloqueada (RF-047): vincula primero tu cuenta Stripe Connect Express para ofrecer sesiones 1-a-1.
+              Publicación bloqueada: vincula primero tu cuenta Stripe Connect Express para ofrecer sesiones 1-a-1.
             </Text>
           </View>
           <PrimaryButton
@@ -323,6 +323,7 @@ export default function TrainerPaymentsScreen() {
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                style={styles.horizontalScroll}
                 contentContainerStyle={styles.modalDaysRow}
               >
                 {dayOptions.map((opt) => {
@@ -416,7 +417,7 @@ export default function TrainerPaymentsScreen() {
         title="¿Bloquear este horario?"
         description={
           deleteTarget
-            ? `El bloque ${deleteTarget.day} a las ${deleteTarget.slot} dejará de aparecer disponible para los socios (RF-053).`
+            ? `El bloque ${deleteTarget.day} a las ${deleteTarget.slot} dejará de aparecer disponible para los socios.`
             : ''
         }
         confirmLabel="Sí, bloquear"
@@ -639,11 +640,16 @@ const styles = StyleSheet.create({
     ...Typography.bodySemiBold,
     color: Colors.night,
   },
+  horizontalScroll: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
   modalDaysRow: {
     gap: 8,
+    alignItems: 'center',
   },
   dayOption: {
-    minHeight: 52,
+    height: 56,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 10,

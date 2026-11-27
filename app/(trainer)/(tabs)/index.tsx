@@ -170,7 +170,7 @@ export default function TrainerAgendaScreen() {
           <View style={styles.connectBannerRow}>
             <AppIcon name="alertTriangle" size={18} color={Colors.warningText} />
             <Text style={styles.connectBannerText}>
-              Vincula tu cuenta Stripe Connect Express para habilitar horarios 1-a-1 (RF-047).
+              Vincula tu cuenta Stripe Connect Express para habilitar horarios 1-a-1.
             </Text>
           </View>
           <SecondaryButton

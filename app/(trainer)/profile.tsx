@@ -49,7 +49,15 @@ export default function TrainerProfileScreen() {
     setBankInput(
       trainer.stripeConnected ? trainer.bankLabel : 'BBVA · Terminación 4821'
     );
-  }, [trainer?.id]);
+  }, [
+    trainer?.id,
+    trainer?.specialty,
+    trainer?.bio,
+    trainer?.rateMxn,
+    trainer?.services,
+    trainer?.stripeConnected,
+    trainer?.bankLabel,
+  ]);
 
   const parsedRate = Number(rateText.replace(/[^0-9]/g, '')) || 0;
   const liveSplit = useMemo(() => splitCommission(parsedRate), [parsedRate]);
@@ -153,7 +161,7 @@ export default function TrainerProfileScreen() {
         <Text style={styles.helperText}>
           {trainer?.stripeConnected
             ? `Liquidación automática del 90% activa en ${trainer.bankLabel}.`
-            : 'Vincula una cuenta de prueba en Stripe Connect Express para habilitar la publicación de horarios 1-a-1 (RF-046, RF-047).'}
+            : 'Vincula una cuenta de prueba en Stripe Connect Express para habilitar la publicación de horarios 1-a-1.'}
         </Text>
 
         <View style={styles.fieldGroup}>

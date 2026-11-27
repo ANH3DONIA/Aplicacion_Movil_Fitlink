@@ -216,7 +216,7 @@ export default function TrainerRequestsScreen() {
         title="¿Cancelar sesión 1-a-1?"
         description={
           cancelTarget?.status === 'Confirmada'
-            ? `Cuando el entrenador cancela una sesión confirmada, ${cancelTarget.memberName} recibe el reembolso total del 100% ($${cancelTarget.grossMxn} MXN) en su tarjeta (RF-059, RN-06).`
+            ? `Cuando el entrenador cancela una sesión confirmada, ${cancelTarget.memberName} recibe el reembolso total del 100% ($${cancelTarget.grossMxn} MXN) en su tarjeta.`
             : `Se cancelará el horario reservado para ${cancelTarget?.memberName ?? 'el socio'} y se enviará notificación.`
         }
         confirmLabel="Confirmar cancelación"

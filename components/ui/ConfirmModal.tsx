@@ -139,11 +139,11 @@ const styles = StyleSheet.create({
   },
   actions: {
     width: '100%',
-    flexDirection: 'row',
-    gap: 12,
+    flexDirection: 'column-reverse',
+    gap: 10,
     marginTop: 4,
   },
   actionBtn: {
-    flex: 1,
+    width: '100%',
   },
 });

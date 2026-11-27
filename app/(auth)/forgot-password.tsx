@@ -30,7 +30,7 @@ export default function ForgotPasswordScreen() {
     setSent(true);
     showToast({
       title: 'Enlace de recuperación enviado',
-      description: `Válido por 1 hora en ${clean} (RF-006).`,
+      description: `Válido por 1 hora en ${clean}.`,
       tone: 'success',
     });
   };
@@ -88,7 +88,7 @@ export default function ForgotPasswordScreen() {
           <View style={styles.successCard}>
             <AppIcon name="checkCircle" size={20} color={Colors.successText} />
             <Text style={styles.successText}>
-              Si existe una cuenta para {email.trim().toLowerCase()}, recibirás un enlace con vigencia de 60 minutos (RN-13).
+              Si existe una cuenta para {email.trim().toLowerCase()}, recibirás un enlace con vigencia de 60 minutos.
             </Text>
           </View>
         ) : null}

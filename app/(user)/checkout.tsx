@@ -198,7 +198,7 @@ export default function CheckoutScreen() {
               <View style={styles.cashNotice}>
                 <AppIcon name="info" size={18} color={Colors.infoText} />
                 <Text style={styles.cashNoticeText}>
-                  Presenta este folio en recepción dentro de las próximas 48 horas para validar tu pago y activar el acceso (RN-09).
+                  Presenta este folio en recepción dentro de las próximas 48 horas para validar tu pago y activar el acceso.
                 </Text>
               </View>
             </>
@@ -241,6 +241,7 @@ export default function CheckoutScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
+            style={styles.horizontalScroll}
             contentContainerStyle={styles.datesRow}
           >
             {passDateOptions.map((opt) => {
@@ -347,7 +348,7 @@ export default function CheckoutScreen() {
           <View style={styles.cashNotice}>
             <AppIcon name="info" size={18} color={Colors.infoText} />
             <Text style={styles.cashNoticeText}>
-              Las sesiones 1-a-1 se liquidan exclusivamente con tarjeta para procesar el reparto automático con el entrenador (RN-08).
+              Las sesiones 1-a-1 se liquidan exclusivamente con tarjeta para procesar el reparto automático con el entrenador.
             </Text>
           </View>
         ) : (
@@ -436,11 +437,16 @@ const styles = StyleSheet.create({
     ...Typography.subtitleSora,
     color: Colors.night,
   },
+  horizontalScroll: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
   datesRow: {
     gap: 8,
+    alignItems: 'center',
   },
   dateChip: {
-    minHeight: 52,
+    height: 56,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 12,

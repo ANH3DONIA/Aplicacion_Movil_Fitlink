@@ -181,7 +181,7 @@ export default function SessionConfirmScreen() {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Desglose (RN-08)</Text>
+        <Text style={styles.sectionTitle}>Desglose</Text>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Tarifa de la sesión</Text>
           <Text style={[styles.summaryValue, tabularNums]}>
@@ -204,7 +204,7 @@ export default function SessionConfirmScreen() {
         <View style={styles.infoBanner}>
           <AppIcon name="info" size={18} color={Colors.infoText} />
           <Text style={styles.infoBannerText}>
-            Sin cargo inicial. Cuando el entrenador acepte tendrás 12 horas para pagar con tarjeta (RN-07).
+            Sin cargo inicial. Cuando el entrenador acepte tendrás 12 horas para pagar con tarjeta.
           </Text>
         </View>
       </View>

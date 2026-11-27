@@ -80,9 +80,7 @@ export function SecondaryButton({
       ) : (
         <View style={styles.content}>
           {icon ? <AppIcon name={icon} size={18} color={textColor} strokeWidth={2.2} /> : null}
-          <Text style={[styles.label, { color: textColor }]} numberOfLines={1}>
-            {label}
-          </Text>
+          <Text style={[styles.label, { color: textColor }]}>{label}</Text>
         </View>
       )}
     </Pressable>
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
   button: {
     minHeight: 48,
     borderRadius: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
     paddingVertical: 12,
     alignItems: 'center',
     justifyContent: 'center',
@@ -117,6 +115,8 @@ const styles = StyleSheet.create({
   },
   label: {
     ...Typography.bodySemiBold,
+    textAlign: 'center',
+    flexShrink: 1,
   },
   pressed: {
     opacity: 0.88,

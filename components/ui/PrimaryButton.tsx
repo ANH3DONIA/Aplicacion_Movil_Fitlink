@@ -67,9 +67,7 @@ export function PrimaryButton({
       ) : (
         <View style={styles.content}>
           {icon ? <AppIcon name={icon} size={18} color={Colors.night} strokeWidth={2.2} /> : null}
-          <Text style={styles.label} numberOfLines={1}>
-            {label}
-          </Text>
+          <Text style={styles.label}>{label}</Text>
         </View>
       )}
     </Pressable>
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
     minHeight: 52,
     borderRadius: 12,
     backgroundColor: Colors.brandYellow,
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
@@ -95,6 +93,8 @@ const styles = StyleSheet.create({
   label: {
     ...Typography.bodySemiBold,
     color: Colors.night,
+    textAlign: 'center',
+    flexShrink: 1,
   },
   pressed: {
     opacity: 0.9,

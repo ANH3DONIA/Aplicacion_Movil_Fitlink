@@ -218,7 +218,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         return { ok: false, message: 'Ingresa un correo electrónico válido.' };
       }
       if (!password || password.length < 8) {
-        return { ok: false, message: 'La contraseña debe tener al menos 8 caracteres (RN-13).' };
+        return { ok: false, message: 'La contraseña debe tener al menos 8 caracteres.' };
       }
 
       if (role === 'entrenador') {
@@ -301,10 +301,10 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         members.some((m) => m.email.toLowerCase() === cleanEmail) ||
         trainers.some((t) => t.email.toLowerCase() === cleanEmail)
       ) {
-        return { ok: false, message: 'Ese correo ya está registrado en FitLink (RN-13).' };
+        return { ok: false, message: 'Ese correo ya está registrado en FitLink.' };
       }
       if (password.length < 8) {
-        return { ok: false, message: 'La contraseña debe tener mínimo 8 caracteres (RN-13).' };
+        return { ok: false, message: 'La contraseña debe tener mínimo 8 caracteres.' };
       }
 
       const newId = `mem-${Date.now().toString().slice(-4)}`;
@@ -357,7 +357,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         return { ok: false, message: 'Ingresa tu código de invitación o correo.' };
       }
       if (password.length < 8) {
-        return { ok: false, message: 'Define una contraseña de al menos 8 caracteres (RN-13).' };
+        return { ok: false, message: 'Define una contraseña de al menos 8 caracteres.' };
       }
 
       const invite = invites.find(
@@ -374,7 +374,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
       if (invite.expiresInHours <= 0) {
         return {
           ok: false,
-          message: 'Esta invitación venció (vigencia máxima de 48 horas, RF-004). Solicita una nueva en recepción.',
+          message: 'Esta invitación venció (vigencia máxima de 48 horas). Solicita una nueva en recepción.',
         };
       }
 
@@ -442,7 +442,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         return {
           ok: false,
           message:
-            'Necesitas una membresía activa o un pase de día vigente para reservar clases (RN-01).',
+            'Necesitas una membresía activa o un pase de día vigente para reservar clases.',
         };
       }
 
@@ -458,15 +458,15 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
       ) {
         return {
           ok: false,
-          message: `Tu Pase de Día es válido únicamente para el ${currentUser.passValidDate} (RN-01).`,
+          message: `Tu Pase de Día es válido únicamente para el ${currentUser.passValidDate}.`,
         };
       }
 
       if (target.enrolledMemberIds.includes(currentUser.id)) {
-        return { ok: false, message: 'Ya tienes una reserva activa en esta clase (RN-03).' };
+        return { ok: false, message: 'Ya tienes una reserva activa en esta clase.' };
       }
       if (target.enrolledMemberIds.length >= target.capacity) {
-        return { ok: false, message: 'Cupo lleno. Puedes anotarte en la lista de espera (RN-02).' };
+        return { ok: false, message: 'Cupo lleno. Puedes anotarte en la lista de espera.' };
       }
 
       setClasses((prev) =>
@@ -504,7 +504,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
       ) {
         return {
           ok: false,
-          message: 'Requiere membresía activa o pase vigente para entrar en lista de espera (RN-01).',
+          message: 'Requiere membresía activa o pase vigente para entrar en lista de espera.',
         };
       }
       const target = classes.find((c) => c.id === classId);
@@ -575,7 +575,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
       if (minutesRemaining < 120) {
         return {
           ok: false,
-          message: `No se permite cancelar cuando faltan menos de 2 horas para la clase (${target.startTime}, RN-04).`,
+          message: `No se permite cancelar cuando faltan menos de 2 horas para la clase (${target.startTime}).`,
         };
       }
 
@@ -829,7 +829,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         description: qualifiesFullRefund
           ? `${target.memberName} canceló con ≥ 12 h de anticipación (reembolso total aplicado).`
           : lateConfirmedCancel
-          ? `${target.memberName} canceló con < 12 h. Conservas tu pago neto (RN-06).`
+          ? `${target.memberName} canceló con menos de 12 h. Conservas tu pago neto.`
           : `${target.memberName} canceló su solicitud del ${target.day} (${target.slot}).`,
         tone: 'warning',
         targetRoute: '/(trainer)/(tabs)/requests',
@@ -839,9 +839,9 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         role: 'usuario',
         title: qualifiesFullRefund ? 'Sesión cancelada · Reembolso total' : 'Sesión 1-a-1 cancelada',
         description: qualifiesFullRefund
-          ? `Se reembolsaron $${target.grossMxn} MXN a tu tarjeta por cancelar con 12 h o más (RN-06).`
+          ? `Se reembolsaron $${target.grossMxn} MXN a tu tarjeta por cancelar con 12 h o más.`
           : lateConfirmedCancel
-          ? 'Cancelada con menos de 12 h de anticipación; no aplica reembolso (RN-06).'
+          ? 'Cancelada con menos de 12 h de anticipación; no aplica reembolso.'
           : `Cancelaste tu solicitud con ${target.trainerName}.`,
         tone: qualifiesFullRefund ? 'info' : 'warning',
         targetRoute: '/(user)/payments',
@@ -852,7 +852,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         message: qualifiesFullRefund
           ? `Sesión cancelada · Reembolso total de $${target.grossMxn} MXN aplicado.`
           : lateConfirmedCancel
-          ? 'Sesión cancelada (< 12 h, sin reembolso según RN-06).'
+          ? 'Sesión cancelada (menos de 12 h, sin reembolso).'
           : 'Solicitud cancelada.',
       };
     },
@@ -872,7 +872,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
             ? {
                 ...s,
                 status: 'Cancelada',
-                cancelReason: 'Cancelada por entrenador · Reembolso total (RN-06)',
+                cancelReason: 'Cancelada por entrenador · Reembolso total',
               }
             : s
         )
@@ -897,7 +897,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
           ? 'Sesión cancelada · Reembolso del 100%'
           : 'Sesión cancelada por entrenador',
         description: wasConfirmed
-          ? `${target.trainerName} canceló la sesión del ${target.day} (${target.slot}). Recibes reembolso total de $${target.grossMxn} MXN (RN-06).`
+          ? `${target.trainerName} canceló la sesión del ${target.day} (${target.slot}). Recibes reembolso total de $${target.grossMxn} MXN.`
           : `${target.trainerName} canceló el horario ${target.day} · ${target.slot}.`,
         tone: 'info',
         targetRoute: '/(user)/payments',
@@ -1009,7 +1009,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
     pushNotification({
       role: 'usuario',
       title: 'Renovación automática cancelada',
-      description: `Conservarás acceso completo hasta el ${currentUser.membershipExpiresAt} sin nuevos cargos (RN-10).`,
+      description: `Conservarás acceso completo hasta el ${currentUser.membershipExpiresAt} sin nuevos cargos.`,
       tone: 'info',
       targetRoute: '/(user)/(tabs)/profile',
     });
@@ -1109,7 +1109,7 @@ export function FitLinkMobileProvider({ children }: { children: React.ReactNode 
         return {
           ok: false,
           message:
-            'Debes vincular tu cuenta Stripe Connect Express antes de publicar disponibilidad (RF-047).',
+            'Debes vincular tu cuenta Stripe Connect Express antes de publicar disponibilidad.',
         };
       }
       const cleanDay = day.trim();

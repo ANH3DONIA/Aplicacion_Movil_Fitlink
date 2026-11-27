@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FlatList, ListRenderItem, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScreenWrapper } from '../../../components/layout/ScreenWrapper';
 import { AppIcon } from '../../../components/ui/AppIcon';
 import { ConfirmModal } from '../../../components/ui/ConfirmModal';
@@ -14,7 +14,208 @@ import { Colors } from '../../../constants/Colors';
 import { tabularNums, Typography } from '../../../constants/Typography';
 import { formatShortDateES } from '../../../data/seedData';
 import { useFitLink } from '../../../store/FitLinkMobileContext';
-import { AttendanceStatus } from '../../../types/fitlink';
+import { AttendanceStatus, GymClass } from '../../../types/fitlink';
+
+interface EnrolledMember {
+  id: string;
+  name: string;
+  planName: string;
+}
+
+function AttendanceStudentRow({
+  student,
+  status,
+  onSetStatus,
+}: {
+  student: EnrolledMember;
+  status: AttendanceStatus;
+  onSetStatus: (memberId: string, value: AttendanceStatus) => void;
+}) {
+  const isPresent = status === 'Presente';
+  const isAbsent = status === 'Ausente';
+
+  return (
+    <View style={styles.studentCard}>
+      <View style={styles.studentInfoRow}>
+        <InitialsAvatar name={student.name} size="sm" tone="soft" />
+        <View style={styles.studentTextWrap}>
+          <Text style={styles.studentName} numberOfLines={1}>
+            {student.name}
+          </Text>
+          <Text style={styles.studentPlan} numberOfLines={1}>
+            {student.planName}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.toggleRow}>
+        <Pressable
+          onPress={() => onSetStatus(student.id, 'Presente')}
+          accessibilityRole="button"
+          accessibilityState={{ selected: isPresent }}
+          accessibilityLabel={`Marcar asistencia de ${student.name}`}
+          style={({ pressed }) => [
+            styles.toggleBtn,
+            isPresent ? styles.togglePresentActive : styles.toggleNeutral,
+            pressed && styles.pressed,
+          ]}
+        >
+          <AppIcon
+            name="checkCircle"
+            size={18}
+            color={isPresent ? Colors.surfaceWhite : Colors.successText}
+          />
+          <Text
+            style={[
+              styles.toggleLabel,
+              { color: isPresent ? Colors.surfaceWhite : Colors.successText },
+            ]}
+          >
+            Asistió
+          </Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => onSetStatus(student.id, 'Ausente')}
+          accessibilityRole="button"
+          accessibilityState={{ selected: isAbsent }}
+          accessibilityLabel={`Marcar falta de ${student.name}`}
+          style={({ pressed }) => [
+            styles.toggleBtn,
+            isAbsent ? styles.toggleAbsentActive : styles.toggleNeutral,
+            pressed && styles.pressed,
+          ]}
+        >
+          <AppIcon
+            name="xCircle"
+            size={18}
+            color={isAbsent ? Colors.surfaceWhite : Colors.errorText}
+          />
+          <Text
+            style={[
+              styles.toggleLabel,
+              { color: isAbsent ? Colors.surfaceWhite : Colors.errorText },
+            ]}
+          >
+            Faltó
+          </Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+function AttendanceHeader({
+  trainerClasses,
+  activeClass,
+  enrolledCount,
+  presentCount,
+  isDirty,
+  onSelectClass,
+  onMarkAllPresent,
+}: {
+  trainerClasses: GymClass[];
+  activeClass: GymClass | null;
+  enrolledCount: number;
+  presentCount: number;
+  isDirty: boolean;
+  onSelectClass: (classId: string) => void;
+  onMarkAllPresent: () => void;
+}) {
+  const renderClassChip = useCallback(
+    ({ item: gymClass }: { item: GymClass }) => {
+      const isSelected = gymClass.id === activeClass?.id;
+      return (
+        <Pressable
+          onPress={() => onSelectClass(gymClass.id)}
+          accessibilityRole="button"
+          accessibilityState={{ selected: isSelected }}
+          style={({ pressed }) => [
+            styles.classChip,
+            isSelected ? styles.classChipActive : styles.classChipInactive,
+            pressed && styles.pressed,
+          ]}
+        >
+          <Text
+            style={[
+              styles.classChipText,
+              tabularNums,
+              isSelected ? styles.classChipTextActive : styles.classChipTextInactive,
+            ]}
+            numberOfLines={1}
+          >
+            {gymClass.name} · {formatShortDateES(gymClass.day)} {gymClass.startTime}
+          </Text>
+        </Pressable>
+      );
+    },
+    [activeClass?.id, onSelectClass]
+  );
+
+  return (
+    <View style={styles.header}>
+      <Text style={styles.title}>Asistencia de clase</Text>
+
+      {trainerClasses.length > 0 && (
+        <FlatList
+          data={trainerClasses}
+          keyExtractor={(gymClass) => gymClass.id}
+          renderItem={renderClassChip}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.horizontalScroll}
+          contentContainerStyle={styles.chipsRow}
+        />
+      )}
+
+      {!activeClass ? (
+        <EmptyState
+          icon="users"
+          title="Sin clases asignadas"
+          description="Aún no tienes clases grupales asignadas para pasar lista."
+        />
+      ) : (
+        <View style={styles.summaryCard}>
+          <View style={styles.summaryHeader}>
+            <View style={styles.summaryTitleWrap}>
+              <Text style={styles.className}>{activeClass.name}</Text>
+              <Text style={[styles.classMeta, tabularNums]}>
+                {formatShortDateES(activeClass.day)} · {activeClass.startTime} – {activeClass.endTime} · {activeClass.room}
+              </Text>
+            </View>
+            <View style={styles.counterBox}>
+              <Text style={styles.counterValue}>
+                {presentCount} / {enrolledCount}
+              </Text>
+              <Text style={styles.counterLabel}>Presentes</Text>
+            </View>
+          </View>
+
+          <View style={styles.summaryActionsRow}>
+            {isDirty ? (
+              <StatusChip label="Cambios sin guardar" tone="warning" icon="alertTriangle" />
+            ) : (
+              <StatusChip
+                label={`Cupo ${enrolledCount}/${activeClass.capacity}`}
+                tone="neutral"
+                icon="users"
+              />
+            )}
+
+            {enrolledCount > 0 ? (
+              <SecondaryButton
+                label="Todos asistieron"
+                variant="outline"
+                icon="userCheck"
+                onPress={onMarkAllPresent}
+              />
+            ) : null}
+          </View>
+        </View>
+      )}
+    </View>
+  );
+}
 
 export default function TrainerAttendanceScreen() {
   const params = useLocalSearchParams<{ classId?: string }>();
@@ -43,8 +244,8 @@ export default function TrainerAttendanceScreen() {
     if (params.classId && trainerClasses.some((c) => c.id === params.classId)) {
       setSelectedClassId(params.classId);
       setIsDirty(false);
-    } else if (!selectedClassId && trainerClasses.length > 0) {
-      setSelectedClassId(trainerClasses[0].id);
+    } else if (trainerClasses.length > 0) {
+      setSelectedClassId((currentId) => currentId || trainerClasses[0].id);
     }
   }, [params.classId, trainerClasses]);
 
@@ -99,7 +300,7 @@ export default function TrainerAttendanceScreen() {
     setPendingSwitchClassId(null);
   };
 
-  const setStudentStatus = (memberId: string, status: AttendanceStatus) => {
+  const setStudentStatus = useCallback((memberId: string, status: AttendanceStatus) => {
     if (Platform.OS !== 'web') {
       Haptics.selectionAsync().catch(() => {});
     }
@@ -108,7 +309,18 @@ export default function TrainerAttendanceScreen() {
       [memberId]: prev[memberId] === status ? 'Pendiente' : status,
     }));
     setIsDirty(true);
-  };
+  }, []);
+
+  const renderStudent: ListRenderItem<EnrolledMember> = useCallback(
+    ({ item }) => (
+      <AttendanceStudentRow
+        student={item}
+        status={localAttendance[item.id] ?? 'Pendiente'}
+        onSetStatus={setStudentStatus}
+      />
+    ),
+    [localAttendance, setStudentStatus]
+  );
 
   const handleMarkAllPresent = () => {
     if (!activeClass) return;
@@ -140,208 +352,65 @@ export default function TrainerAttendanceScreen() {
   };
 
   return (
-    <ScreenWrapper scroll contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Asistencia de clase</Text>
-
-      {trainerClasses.length > 0 && (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.chipsRow}
-        >
-          {trainerClasses.map((gymClass) => {
-            const isSelected = gymClass.id === activeClass?.id;
-            return (
-              <Pressable
-                key={gymClass.id}
-                onPress={() => handleSelectClassChip(gymClass.id)}
-                accessibilityRole="button"
-                accessibilityState={{ selected: isSelected }}
-                style={({ pressed }) => [
-                  styles.classChip,
-                  isSelected ? styles.classChipActive : styles.classChipInactive,
-                  pressed && styles.pressed,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.classChipText,
-                    tabularNums,
-                    isSelected ? styles.classChipTextActive : styles.classChipTextInactive,
-                  ]}
-                  numberOfLines={1}
-                >
-                  {gymClass.name} · {formatShortDateES(gymClass.day)} {gymClass.startTime}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      )}
-
-      {!activeClass ? (
-        <EmptyState
-          icon="users"
-          title="Sin clases asignadas"
-          description="Aún no tienes clases grupales asignadas para pasar lista."
-        />
-      ) : (
-        <>
-          <View style={styles.summaryCard}>
-            <View style={styles.summaryHeader}>
-              <View style={styles.summaryTitleWrap}>
-                <Text style={styles.className}>{activeClass.name}</Text>
-                <Text style={[styles.classMeta, tabularNums]}>
-                  {formatShortDateES(activeClass.day)} · {activeClass.startTime} – {activeClass.endTime} · {activeClass.room}
-                </Text>
-              </View>
-              <View style={styles.counterBox}>
-                <Text style={styles.counterValue}>
-                  {presentCount} / {enrolledMembers.length}
-                </Text>
-                <Text style={styles.counterLabel}>Presentes</Text>
-              </View>
-            </View>
-
-            <View style={styles.summaryActionsRow}>
-              {isDirty ? (
-                <StatusChip
-                  label="Cambios sin guardar"
-                  tone="warning"
-                  icon="alertTriangle"
-                />
-              ) : (
-                <StatusChip
-                  label={`Cupo ${enrolledMembers.length}/${activeClass.capacity}`}
-                  tone="neutral"
-                  icon="users"
-                />
-              )}
-
-              {enrolledMembers.length > 0 ? (
-                <SecondaryButton
-                  label="Todos asistieron"
-                  variant="outline"
-                  icon="userCheck"
-                  onPress={handleMarkAllPresent}
-                />
-              ) : null}
-            </View>
-          </View>
-
-          {enrolledMembers.length === 0 ? (
+    <ScreenWrapper scroll={false}>
+      <FlatList
+        data={enrolledMembers}
+        keyExtractor={(student) => student.id}
+        renderItem={renderStudent}
+        ListHeaderComponent={
+          <AttendanceHeader
+            trainerClasses={trainerClasses}
+            activeClass={activeClass}
+            enrolledCount={enrolledMembers.length}
+            presentCount={presentCount}
+            isDirty={isDirty}
+            onSelectClass={handleSelectClassChip}
+            onMarkAllPresent={handleMarkAllPresent}
+          />
+        }
+        ListEmptyComponent={
+          activeClass ? (
             <EmptyState
               icon="userCheck"
               title="Sin alumnos inscritos"
               description="Todavía no hay socios registrados en esta clase."
             />
-          ) : (
-            <View style={styles.studentsList}>
-              {enrolledMembers.map((student) => {
-                const status = localAttendance[student.id] ?? 'Pendiente';
-                const isPresent = status === 'Presente';
-                const isAbsent = status === 'Ausente';
-
-                return (
-                  <View key={student.id} style={styles.studentCard}>
-                    <View style={styles.studentInfoRow}>
-                      <InitialsAvatar name={student.name} size="sm" tone="soft" />
-                      <View style={styles.studentTextWrap}>
-                        <Text style={styles.studentName} numberOfLines={1}>
-                          {student.name}
-                        </Text>
-                        <Text style={styles.studentPlan} numberOfLines={1}>
-                          {student.planName}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View style={styles.toggleRow}>
-                      <Pressable
-                        onPress={() => setStudentStatus(student.id, 'Presente')}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: isPresent }}
-                        accessibilityLabel={`Marcar asistencia de ${student.name}`}
-                        style={({ pressed }) => [
-                          styles.toggleBtn,
-                          isPresent ? styles.togglePresentActive : styles.toggleNeutral,
-                          pressed && styles.pressed,
-                        ]}
-                      >
-                        <AppIcon
-                          name="checkCircle"
-                          size={18}
-                          color={isPresent ? Colors.surfaceWhite : Colors.successText}
-                        />
-                        <Text
-                          style={[
-                            styles.toggleLabel,
-                            { color: isPresent ? Colors.surfaceWhite : Colors.successText },
-                          ]}
-                        >
-                          Asistió
-                        </Text>
-                      </Pressable>
-
-                      <Pressable
-                        onPress={() => setStudentStatus(student.id, 'Ausente')}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: isAbsent }}
-                        accessibilityLabel={`Marcar falta de ${student.name}`}
-                        style={({ pressed }) => [
-                          styles.toggleBtn,
-                          isAbsent ? styles.toggleAbsentActive : styles.toggleNeutral,
-                          pressed && styles.pressed,
-                        ]}
-                      >
-                        <AppIcon
-                          name="xCircle"
-                          size={18}
-                          color={isAbsent ? Colors.surfaceWhite : Colors.errorText}
-                        />
-                        <Text
-                          style={[
-                            styles.toggleLabel,
-                            { color: isAbsent ? Colors.surfaceWhite : Colors.errorText },
-                          ]}
-                        >
-                          Faltó
-                        </Text>
-                      </Pressable>
-                    </View>
-                  </View>
-                );
-              })}
-            </View>
-          )}
-
-          {enrolledMembers.length > 0 && (
-            <PrimaryButton
-              label="Guardar asistencia"
-              icon="check"
-              onPress={handleSave}
-              style={styles.saveButton}
+          ) : undefined
+        }
+        ListFooterComponent={
+          <>
+            {enrolledMembers.length > 0 && (
+              <PrimaryButton
+                label="Guardar asistencia"
+                icon="check"
+                onPress={handleSave}
+                style={styles.saveButton}
+              />
+            )}
+            <ConfirmModal
+              visible={pendingSwitchClassId !== null}
+              title="¿Descartar cambios?"
+              description="Tienes cambios de asistencia sin guardar en esta clase. Si cambias de clase se perderán."
+              confirmLabel="Descartar y cambiar"
+              cancelLabel="Seguir editando"
+              destructive
+              tone="warning"
+              onConfirm={confirmSwitchClass}
+              onCancel={() => setPendingSwitchClassId(null)}
             />
-          )}
-        </>
-      )}
-
-      <ConfirmModal
-        visible={pendingSwitchClassId !== null}
-        title="¿Descartar cambios?"
-        description="Tienes cambios de asistencia sin guardar en esta clase. Si cambias de clase se perderán."
-        confirmLabel="Descartar y cambiar"
-        cancelLabel="Seguir editando"
-        destructive
-        tone="warning"
-        onConfirm={confirmSwitchClass}
-        onCancel={() => setPendingSwitchClassId(null)}
+          </>
+        }
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
       />
     </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    gap: 14,
+  },
   content: {
     gap: 14,
     paddingTop: 16,
@@ -351,12 +420,17 @@ const styles = StyleSheet.create({
     ...Typography.title,
     color: Colors.night,
   },
+  horizontalScroll: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
   chipsRow: {
     gap: 8,
     paddingVertical: 2,
+    alignItems: 'center',
   },
   classChip: {
-    minHeight: 48,
+    height: 48,
     paddingHorizontal: 14,
     borderRadius: 10,
     borderWidth: 1,

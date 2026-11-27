@@ -123,7 +123,7 @@ export default function UserPaymentsScreen() {
 
                 {payment.status === 'Pendiente' && payment.expiresInHours ? (
                   <Text style={styles.expiryNote}>
-                    Ficha válida por {payment.expiresInHours} h en recepción (RN-09)
+                    Ficha válida por {payment.expiresInHours} h en recepción
                   </Text>
                 ) : null}
               </View>

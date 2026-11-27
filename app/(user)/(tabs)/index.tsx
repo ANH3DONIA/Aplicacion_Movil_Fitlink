@@ -220,6 +220,7 @@ export default function UserHomeScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={styles.horizontalScroll}
         contentContainerStyle={styles.filterRow}
       >
         {dayChips.map((chip) => {
@@ -253,6 +254,7 @@ export default function UserHomeScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={styles.horizontalScroll}
         contentContainerStyle={styles.filterRow}
       >
         {DISCIPLINE_FILTERS.map((disc) => {
@@ -476,12 +478,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: -8,
   },
+  horizontalScroll: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
   filterRow: {
     gap: 8,
     paddingBottom: 10,
+    alignItems: 'center',
   },
   filterChip: {
-    minHeight: 48,
+    height: 48,
     paddingHorizontal: 14,
     borderRadius: 10,
     alignItems: 'center',

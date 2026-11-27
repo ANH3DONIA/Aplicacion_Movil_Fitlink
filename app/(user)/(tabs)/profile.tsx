@@ -387,7 +387,7 @@ export default function UserProfileScreen() {
       <ConfirmModal
         visible={cancelRenewModalVisible}
         title="¿Cancelar renovación automática?"
-        description={`No se realizará ningún cobro mensual adicional y conservarás tu acceso completo hasta el ${currentUser?.membershipExpiresAt ?? 'fin del periodo'} (RF-033).`}
+        description={`No se realizará ningún cobro mensual adicional y conservarás tu acceso completo hasta el ${currentUser?.membershipExpiresAt ?? 'fin del periodo'}.`}
         confirmLabel="Sí, cancelar renovación"
         cancelLabel="Mantener activa"
         destructive

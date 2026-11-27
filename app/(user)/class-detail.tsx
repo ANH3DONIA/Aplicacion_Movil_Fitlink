@@ -200,7 +200,7 @@ export default function ClassDetailScreen() {
               <AppIcon name="info" size={20} color={Colors.infoText} />
             </View>
             <View style={styles.infoTextWrap}>
-              <Text style={styles.detailLabel}>Regla de cancelación (RN-04)</Text>
+              <Text style={styles.detailLabel}>Política de cancelación</Text>
               <Text style={styles.detailValue}>
                 Hasta 2 horas antes del inicio sin penalización
               </Text>
@@ -223,7 +223,7 @@ export default function ClassDetailScreen() {
               />
               {lockedWithin2h ? (
                 <Text style={styles.lockedWarning}>
-                  Faltan menos de 2 horas para iniciar: el sistema ya no permite cancelar esta reserva (RF-020).
+                  Faltan menos de 2 horas para iniciar: el sistema ya no permite cancelar esta reserva.
                 </Text>
               ) : null}
               <SecondaryButton
@@ -238,7 +238,7 @@ export default function ClassDetailScreen() {
               <View style={styles.membershipAlert}>
                 <AppIcon name="alertTriangle" size={18} color={Colors.warningText} />
                 <Text style={styles.membershipAlertText}>
-                  Tu membresía está en estado «{currentUser?.membershipStatus ?? 'Vencida'}». Activa un plan o Pase de Día para reservar (RN-01).
+                  Tu membresía está en estado «{currentUser?.membershipStatus ?? 'Vencida'}». Activa un plan o Pase de Día para reservar.
                 </Text>
               </View>
               <PrimaryButton
@@ -265,7 +265,7 @@ export default function ClassDetailScreen() {
         description={
           isWaitlisted
             ? `Dejarás tu turno en la lista de espera para ${gymClass.name}.`
-            : `Puedes cancelar hasta 2 horas antes del inicio de ${gymClass.name} (RN-04).`
+            : `Puedes cancelar hasta 2 horas antes del inicio de ${gymClass.name}.`
         }
         confirmLabel={isWaitlisted ? 'Sí, salir' : 'Confirmar cancelación'}
         cancelLabel="Mantener lugar"
